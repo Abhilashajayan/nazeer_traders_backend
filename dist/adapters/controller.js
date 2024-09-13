@@ -28,6 +28,46 @@ class Controller {
             }
         });
     }
+    updateCompany(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const companyId = req.params.id;
+                const payload = req.body;
+                const updatedCompany = yield this.useCase.update(companyId, payload);
+                res.status(201).json(updatedCompany);
+            }
+            catch (error) {
+                res.status(500).send("Error while updating company");
+                console.log("Error while updating company => ", error);
+            }
+        });
+    }
+    // get companies
+    companies(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const companies = yield this.useCase.companies();
+                res.status(201).json(companies);
+            }
+            catch (error) {
+                res.status(500).send("Error while creating company");
+                console.log("Error while creating company => ", error);
+            }
+        });
+    }
+    show(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const companyId = req.params.id;
+                const company = yield this.useCase.show(companyId);
+                res.status(201).json(company);
+            }
+            catch (error) {
+                res.status(500).send("Error while creating company");
+                console.log("Error while creating company => ", error);
+            }
+        });
+    }
     // Add Employees
     addEmployees(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

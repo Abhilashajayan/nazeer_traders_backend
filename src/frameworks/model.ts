@@ -33,7 +33,7 @@ const EmployeeSchema: Schema = new Schema({
 
 // Company Schema
 const CompanySchema: Schema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String },
   employees: { type: [EmployeeSchema] },
 })
 

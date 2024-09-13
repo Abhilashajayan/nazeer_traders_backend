@@ -16,7 +16,18 @@ export class CompanyRouter {
     this.router.post("/api/companies/create", (req: Request, res: Response) => {
       this.controller.createCompany(req, res);
     });
+    this.router.post("/api/companies/:id/update", (req: Request, res: Response) => {
+      this.controller.updateCompany(req, res);
+    });
 
+    this.router.get("/api/companies", (req: Request, res: Response) => {
+      this.controller.companies(req, res);
+    });
+
+    this.router.get("/api/companies/:id", (req: Request, res: Response) => {
+      this.controller.show(req, res);
+    });
+    
     // Add Employees to Company
     this.router.post("/api/companies/add-employee", (req: Request, res: Response) => {
       this.controller.addEmployees(req, res);

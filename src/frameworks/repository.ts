@@ -8,9 +8,150 @@ import {
   IUsecase,
   WORK_PAYLOAD,
 } from "../adapters/interfaces"
+import { CompanyEntity } from "../entities/entity"
+import { CompanyModel } from "./model";
 
 export class Repository implements IUsecase {
+
   constructor(private CompanyModel: Model<ICompany>) {}
+
+  async update(companyId: string, updatePayload: any): Promise<any> {
+   
+      const { employeeId, work, accountDetails, newEmployee } = updatePayload;
+     
+    try {
+      let updatedCompany;
+
+      // If an employeeId is provided, update existing employee's work or account details
+      if (employeeId) {
+        const updateFields: any = {};
+        
+        // Check if work exists and push to the work array
+        if (work) {
+          updateFields.$push = { "employees.$.work": work };
+        }
+  
+        // Check if account details are provided and set them
+        if (accountDetails) {
+          updateFields.$set = { "employees.$.accountDetails": accountDetails };
+        }
+  
+        updatedCompany = await CompanyModel.findOneAndUpdate(
+          {
+            _id: companyId, // Find the company by companyId
+            "employees._id": employeeId, // Find the employee by employeeId
+          },
+          updateFields,
+          { new: true, upsert: false }
+        );
+        
+        if (!updatedCompany) {
+          throw new Error("Company or Employee not found");
+        }
+      }
+  
+      // If newEmployee is provided, add the new employee to the company
+      if (newEmployee) {
+        updatedCompany = await CompanyModel.findOneAndUpdate(
+          {
+            _id: companyId, // Find the company by companyId
+          },
+          {
+            $push: { employees: newEmployee }, // Add the new employee to the employees array
+          },
+          { new: true, upsert: false }
+        );
+  
+        if (!updatedCompany) {
+          throw new Error("Company not found");
+        }
+      }
+
+       return updatedCompany
+    //   console.log(companyId);
+    //   console.log(updatePayload);
+
+    //   const updatedCompany = await CompanyModel.findOneAndUpdate(
+    //     {
+    //       _id: companyId, // Find the company by companyId
+    //       "employees._id": employeeId, // Find the employee by employeeId
+    //     },
+    //     {
+    //       $push: {
+    //         "employees.$.work": work, // Append the work object to the employee's work array
+    //       },
+    //     },
+    //     { new: true, upsert: false } // Return the updated document
+    //   );
+  
+    //   console.log('updated company',updatedCompany);
+      
+    //  if (!updatedCompany) {
+    //     throw new Error(`Company or Employee not found`);
+    //   }
+  
+    //   return updatedCompany;
+      // Destructure payload to extract keys if they exist
+      // const { employeeId, work, accountDetails, newEmployee } = updatePayload;
+  
+      // const updateQuery: any = {};
+  
+      // if (employeeId && work) {
+      //   // If updating work for a specific employee, push new work to their work array
+      //   updateQuery["employees.$.work"] = { $push: { work } };
+      // }
+  
+      // if (employeeId && accountDetails) {
+      //   // If updating account details for a specific employee, update their account details
+      //   updateQuery["employees.$.accountDetails"] = accountDetails;
+      // }
+  
+      // if (newEmployee) {
+      //   // If adding a new employee, push a new employee to the company
+      //   updateQuery["employees"] = { $push: newEmployee };
+      // }
+  
+      // // Apply the update based on the constructed query
+      // const updatedCompany = await this.CompanyModel.findOneAndUpdate(
+      //   { _id: companyId, ...(employeeId ? { "employees._id": employeeId } : {}) }, // Check for employee if provided
+      //   { $set: updateQuery },
+      //   { new: true, upsert: false } // Return updated document
+      // );
+  
+      // if (!updatedCompany) {
+      //   throw new Error(`Company or Employee not found`);
+      // }
+  
+      // return updatedCompany;
+    } catch (error) {
+      throw new Error(`Error updating company: ${error}`);
+    }
+  }
+  
+
+  //get all companies
+  async companies(): Promise<CompanyEntity[]> {
+    try {
+      const companies = this.CompanyModel.find()
+      return companies
+    } catch (error) {
+      throw new Error(`Error creating company: ${error}`)
+    }
+  }
+
+  async showCompany(companyId: string): Promise<CompanyEntity> {
+    try {
+      const company = await this.CompanyModel.findById(companyId)
+
+      if (!company) {
+        throw new Error(`Company not found`)
+      }
+
+      return company
+    } catch (error) {
+      throw new Error(`Error creating company: ${error}`)
+    }
+  }
 
   // Create a new company
   async createCompany(name: string): Promise<any> {

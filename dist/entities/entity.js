@@ -12,8 +12,9 @@ class Work {
 }
 exports.Work = Work;
 class AccountEntity {
-    constructor(accountId, accountNumber, date, amount, ifsc, proof, createdAt) {
-        this.accountId = accountId;
+    constructor(
+    // public accountId: string,
+    accountNumber, date, amount, ifsc, proof, createdAt) {
         this.accountNumber = accountNumber;
         this.date = date;
         this.amount = amount;
@@ -24,8 +25,9 @@ class AccountEntity {
 }
 exports.AccountEntity = AccountEntity;
 class EmployeeEntity {
-    constructor(employeeId, name, phone, work, accountDetails, createdAt) {
-        this.employeeId = employeeId;
+    constructor(
+    // public employeeId: string,
+    name, phone, work, accountDetails, createdAt) {
         this.name = name;
         this.phone = phone;
         this.work = work;
@@ -35,8 +37,9 @@ class EmployeeEntity {
 }
 exports.EmployeeEntity = EmployeeEntity;
 class CompanyEntity {
-    constructor(companyId, name, employees) {
-        this.companyId = companyId;
+    constructor(
+    // public companyId: string,
+    name, employees) {
         this.name = name;
         this.employees = employees;
     }

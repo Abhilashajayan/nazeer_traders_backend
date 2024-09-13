@@ -1,3 +1,5 @@
+import { CompanyEntity } from "../entities/entity"
+
 export type WORK_PAYLOAD = {
   date: Date
   count: number
@@ -29,6 +31,8 @@ export type ACCOUNT_PAYLOAD = {
 
 export interface IUsecase {
   createCompany(name: string): Promise<any>
+  update(companyId:string,payload: any): Promise<any>
+  companies(): Promise<CompanyEntity[]>
   addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any>
   addWork(params: WORK_PAYLOAD): Promise<any>
   addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any>
@@ -62,7 +66,7 @@ export interface IEmployee {
 }
 
 export interface ICompany {
-//   companyId?: string
+  // companyId?: string
   name: string
   employees: IEmployee[]
 }

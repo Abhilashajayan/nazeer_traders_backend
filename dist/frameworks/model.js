@@ -54,7 +54,7 @@ const EmployeeSchema = new mongoose_1.Schema({
 });
 // Company Schema
 const CompanySchema = new mongoose_1.Schema({
-    name: { type: String, required: true },
+    name: { type: String },
     employees: { type: [EmployeeSchema] },
 });
 // Export Mongoose models
