@@ -31,8 +31,11 @@ class Controller {
     updateCompany(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log(req.body, req.file);
                 const companyId = req.params.id;
                 const payload = req.body;
+                const proofImage = req.file;
+                payload.proof = proofImage;
                 const updatedCompany = yield this.useCase.update(companyId, payload);
                 res.status(201).json(updatedCompany);
             }
@@ -65,84 +68,6 @@ class Controller {
             catch (error) {
                 res.status(500).send("Error while creating company");
                 console.log("Error while creating company => ", error);
-            }
-        });
-    }
-    // Add Employees
-    addEmployees(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { companyId, employeeName, phone } = req.body;
-                const updatedCompany = yield this.useCase.addEmployees({
-                    companyId,
-                    employeeName,
-                    phone,
-                });
-                res.status(200).json(updatedCompany);
-            }
-            catch (error) {
-                res.status(500).send("Error while adding employee");
-                console.log("Error while adding employee => ", error);
-            }
-        });
-    }
-    // Add Work Details for Employee
-    addWork(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { companyId, employeeId, date, count, rate, total } = req.body;
-                const updatedWork = yield this.useCase.addWork({
-                    companyId,
-                    employeeId,
-                    date,
-                    count,
-                    rate,
-                    total,
-                });
-                res.status(200).json(updatedWork);
-            }
-            catch (error) {
-                res.status(500).send("Error while adding work");
-                console.log("Error while adding work => ", error);
-            }
-        });
-    }
-    // Add Payment for Employee
-    addPayment(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { companyId, employeeId, date, amount, proof } = req.body;
-                const payment = yield this.useCase.addPayment({
-                    companyId,
-                    employeeId,
-                    date,
-                    amount,
-                    proof,
-                });
-                res.status(200).json(payment);
-            }
-            catch (error) {
-                res.status(500).send("Error while adding payment");
-                console.log("Error while adding payment => ", error);
-            }
-        });
-    }
-    // Add Bank Account for Employee
-    addBankAccount(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { companyId, employeeId, accountNumber, ifsc } = req.body;
-                const bankAccount = yield this.useCase.addBankAccount({
-                    companyId,
-                    employeeId,
-                    accountNumber,
-                    ifsc,
-                });
-                res.status(200).json(bankAccount);
-            }
-            catch (error) {
-                res.status(500).send("Error while adding bank account");
-                console.log("Error while adding bank account => ", error);
             }
         });
     }

@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 export class Work {
   constructor(
     public date: Date,
@@ -12,9 +14,14 @@ export class AccountEntity {
   constructor(
     // public accountId: string,
     public accountNumber: string,
+    public ifsc: string,
+    public createdAt: Date
+  ) {}
+}
+export class PaymentEntity {
+  constructor(
     public date: Date,
     public amount: number,
-    public ifsc: string,
     public proof: string | File,
     public createdAt: Date
   ) {}
@@ -27,13 +34,14 @@ export class EmployeeEntity {
     public phone: string,
     public work: Work[],
     public accountDetails: AccountEntity, 
+    public payments: PaymentEntity[], 
     public createdAt: Date
   ) {}
 }
 
 export class CompanyEntity {
   constructor(
-    // public companyId: string,
+    // public _id:string,
     public name: string,
     public employees: EmployeeEntity[]
   ) {}

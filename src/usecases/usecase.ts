@@ -23,16 +23,16 @@ export class UseCase implements IUsecase {
   createCompany(name: string): Promise<any> {
     return this.companyRepository?.createCompany(name)
   }
-  addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
-    return this.companyRepository?.addEmployees(params)
-  }
-  addWork(params: WORK_PAYLOAD): Promise<any> {
-    return this.companyRepository?.addWork(params)
-  }
-  addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
-    return this.companyRepository?.addPayment(params)
-  }
-  addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
-    return this.companyRepository?.addBankAccount(params)
-  }
+  // addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
+  //   return this.companyRepository?.addEmployees(params)
+  // }
+  // addWork(params: WORK_PAYLOAD): Promise<any> {
+  //   return this.companyRepository?.addWork(params)
+  // }
+  // addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
+  //   return this.companyRepository?.addPayment(params)
+  // }
+  // addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
+  //   return this.companyRepository?.addBankAccount(params)
+  // }
 }

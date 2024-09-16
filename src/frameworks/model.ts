@@ -10,6 +10,14 @@ const WorkSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now },
 })
 
+// payment Schema
+const PaymentSchema: Schema = new Schema({
+  date: { type: Date },
+  amount: { type: String },
+  proof: { type: String },
+  createdAt: { type: Date, default: Date.now },
+})
+
 // Account Schema
 const AccountSchema: Schema = new Schema({
   //   accountId: { type: String, required: true },
@@ -28,6 +36,7 @@ const EmployeeSchema: Schema = new Schema({
   phone: { type: String, required: true },
   work: { type: [WorkSchema] },
   accountDetails: { type: AccountSchema },
+  payments:{ type: [PaymentSchema] },
   createdAt: { type: Date, default: Date.now },
 })
 
@@ -40,6 +49,7 @@ const CompanySchema: Schema = new Schema({
 // Export Mongoose models
 export const WorkModel = mongoose.model("WorkModel", WorkSchema)
 export const AccountModel = mongoose.model("AccountModel", AccountSchema)
+export const PaymentModel = mongoose.model("PaymentModel", PaymentSchema)
 export const EmployeeModel = mongoose.model("EmployeeModel", EmployeeSchema)
 export const CompanyModel = mongoose.model<ICompany>(
   "CompanyModel",
