@@ -18,7 +18,6 @@ class Repository {
     update(companyId, updatePayload) {
         return __awaiter(this, void 0, void 0, function* () {
             const { employeeId, work, accountDetails, newEmployee, amount, date, proof, } = updatePayload;
-            console.log('the payloadd', updatePayload);
             try {
                 let updatedCompany;
                 // If an employeeId is provided, update existing employee's work or account details
@@ -29,8 +28,12 @@ class Repository {
                         updateFields.$push = { "employees.$.work": work };
                     }
                     if (date && amount) {
-                        console.log("paymentsss", date, amount);
-                        // updateFields.$push = { "employees.$.payments": payments };
+                        const payments = {
+                            date: date,
+                            amount: amount,
+                            proof: proof
+                        };
+                        updateFields.$push = { "employees.$.payments": payments };
                     }
                     // Check if account details are provided and set them
                     if (accountDetails) {
@@ -98,81 +101,95 @@ class Repository {
             catch (error) {
                 throw new Error(`Error creating company: ${error}`);
             }
-            //   }
-            //   // Add an employee to a specific company
-            //   async addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
-            //     try {
-            //       const company = await this.CompanyModel.findById(params?.companyId)
-            //       if (!company) throw new Error("Company not found")
-            //       const newEmployee = {
-            //         id: "",
-            //         name: params?.employeeName,
-            //         phone: params?.phone,
-            //         work: [],
-            //         accountDetails: {
-            //           accountNumber: "",
-            //           ifsc: "",
-            //           createdAt: new Date(),
-            //         },
-            //         payments:[],
-            //         createdAt: new Date(),
-            //       }
-            //       company?.employees?.push(newEmployee)
-            //       return await company.save()
-            //     } catch (error) {
-            //       throw new Error(`Error adding employee: ${error}`)
-            //     }
-            //   }
-            //   // Add work details for an employee in a company
-            //   async addWork(params: WORK_PAYLOAD): Promise<any> {
-            //     try {
-            //       const company = await this.CompanyModel.findById(params?.companyId)
-            //       if (!company) throw new Error("Company not found")
-            //       const employee = company?.employees?.find(
-            //         (emp) => emp.id === params?.employeeId
-            //       )
-            //       if (!employee) throw new Error("Employee not found")
-            //       employee.work.push({
-            //         ...params,
-            //         createdAt: new Date(),
-            //       })
-            //       return await company.save()
-            //     } catch (error) {
-            //       throw new Error(`Error adding work: ${error}`)
-            //     }
-            //   }
-            //   // Add payment details for an employee
-            //   async addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
-            //     try {
-            //       const company = await this.CompanyModel.findById(params?.companyId)
-            //       if (!company) throw new Error("Company not found")
-            //       const employee = company?.employees?.find(
-            //         (emp) => emp.id === params?.employeeId
-            //       )
-            //       if (!employee) throw new Error("Employee not found")
-            //       employee.payments.push(params?.date)
-            //       employee.accountDetails.amount = params?.amount
-            //       employee.accountDetails.proof = params?.proof
-            //       return await company.save()
-            //     } catch (error) {
-            //       throw new Error(`Error adding payment: ${error}`)
-            //     }
-            //   }
-            //   // Add bank account details for an employee
-            //   async addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
-            //     try {
-            //       const company = await this.CompanyModel.findById(params?.companyId)
-            //       if (!company) throw new Error("Company not found")
-            //       const employee = company?.employees?.find(
-            //         (emp) => emp.id === params?.employeeId
-            //       )
-            //       if (!employee) throw new Error("Employee not found")
-            //       employee.accountDetails.accountNumber = params.accountNumber
-            //       employee.accountDetails.ifsc = params.ifsc
-            //       return await company.save()
-            //     } catch (error) {
-            //       throw new Error(`Error adding bank account: ${error}`)
-            //     }
+        });
+    }
+    // Add an employee to a specific company
+    addEmployees(params) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const company = yield this.CompanyModel.findById(params === null || params === void 0 ? void 0 : params.companyId);
+                if (!company)
+                    throw new Error("Company not found");
+                const newEmployee = {
+                    id: "",
+                    name: params === null || params === void 0 ? void 0 : params.employeeName,
+                    phone: params === null || params === void 0 ? void 0 : params.phone,
+                    work: [],
+                    accountDetails: {
+                        accountNumber: "",
+                        ifsc: "",
+                        createdAt: new Date(),
+                    },
+                    payments: [],
+                    createdAt: new Date(),
+                };
+                (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.push(newEmployee);
+                return yield company.save();
+            }
+            catch (error) {
+                throw new Error(`Error adding employee: ${error}`);
+            }
+        });
+    }
+    // Add work details for an employee in a company
+    addWork(params) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const company = yield this.CompanyModel.findById(params === null || params === void 0 ? void 0 : params.companyId);
+                if (!company)
+                    throw new Error("Company not found");
+                const employee = (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.find((emp) => emp.id === (params === null || params === void 0 ? void 0 : params.employeeId));
+                if (!employee)
+                    throw new Error("Employee not found");
+                employee.work.push(Object.assign(Object.assign({}, params), { createdAt: new Date() }));
+                return yield company.save();
+            }
+            catch (error) {
+                throw new Error(`Error adding work: ${error}`);
+            }
+        });
+    }
+    // Add payment details for an employee
+    addPayment(params) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const company = yield this.CompanyModel.findById(params === null || params === void 0 ? void 0 : params.companyId);
+                if (!company)
+                    throw new Error("Company not found");
+                const employee = (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.find((emp) => emp.id === (params === null || params === void 0 ? void 0 : params.employeeId));
+                if (!employee)
+                    throw new Error("Employee not found");
+                employee.payments.push(params === null || params === void 0 ? void 0 : params.date);
+                employee.accountDetails.amount = params === null || params === void 0 ? void 0 : params.amount;
+                employee.accountDetails.proof = params === null || params === void 0 ? void 0 : params.proof;
+                return yield company.save();
+            }
+            catch (error) {
+                throw new Error(`Error adding payment: ${error}`);
+            }
+        });
+    }
+    // Add bank account details for an employee
+    addBankAccount(params) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const company = yield this.CompanyModel.findById(params === null || params === void 0 ? void 0 : params.companyId);
+                if (!company)
+                    throw new Error("Company not found");
+                const employee = (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.find((emp) => emp.id === (params === null || params === void 0 ? void 0 : params.employeeId));
+                if (!employee)
+                    throw new Error("Employee not found");
+                employee.accountDetails.accountNumber = params.accountNumber;
+                employee.accountDetails.ifsc = params.ifsc;
+                return yield company.save();
+            }
+            catch (error) {
+                throw new Error(`Error adding bank account: ${error}`);
+            }
         });
     }
 }

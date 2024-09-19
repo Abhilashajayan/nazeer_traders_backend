@@ -22,6 +22,7 @@ export class CompanyRouter {
       this.controller.updateCompany(req, res);      
     });
 
+
     this.router.get("/api/companies", (req: Request, res: Response) => {
       this.controller.companies(req, res);
     });

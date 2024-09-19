@@ -18,5 +18,21 @@ class UseCase {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.createCompany(name);
     }
+    addEmployees(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addEmployees(params);
+    }
+    addWork(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addWork(params);
+    }
+    addPayment(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addPayment(params);
+    }
+    addBankAccount(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addBankAccount(params);
+    }
 }
 exports.UseCase = UseCase;

@@ -23,11 +23,7 @@ export class Repository implements IUsecase {
       amount,
       date,
       proof,
-    } = updatePayload
-
-    console.log('the payloadd',updatePayload);
-    
-
+    } = updatePayload   
     try {
       let updatedCompany
 
@@ -41,8 +37,12 @@ export class Repository implements IUsecase {
         }
 
         if (date && amount) {
-          console.log("paymentsss", date,amount)
-          // updateFields.$push = { "employees.$.payments": payments };
+          const payments = {
+            date: date,
+            amount: amount,
+            proof: proof
+          }
+          updateFields.$push = { "employees.$.payments": payments };
         }
 
         // Check if account details are provided and set them
@@ -119,96 +119,96 @@ export class Repository implements IUsecase {
     } catch (error) {
       throw new Error(`Error creating company: ${error}`)
     }
-    //   }
+      }
 
-    //   // Add an employee to a specific company
-    //   async addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
-    //     try {
-    //       const company = await this.CompanyModel.findById(params?.companyId)
-    //       if (!company) throw new Error("Company not found")
+      // Add an employee to a specific company
+      async addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
+        try {
+          const company = await this.CompanyModel.findById(params?.companyId)
+          if (!company) throw new Error("Company not found")
 
-    //       const newEmployee = {
-    //         id: "",
-    //         name: params?.employeeName,
-    //         phone: params?.phone,
-    //         work: [],
-    //         accountDetails: {
-    //           accountNumber: "",
-    //           ifsc: "",
-    //           createdAt: new Date(),
-    //         },
-    //         payments:[],
-    //         createdAt: new Date(),
-    //       }
+          const newEmployee = {
+            id: "",
+            name: params?.employeeName,
+            phone: params?.phone,
+            work: [],
+            accountDetails: {
+              accountNumber: "",
+              ifsc: "",
+              createdAt: new Date(),
+            },
+            payments:[],
+            createdAt: new Date(),
+          }
 
-    //       company?.employees?.push(newEmployee)
-    //       return await company.save()
-    //     } catch (error) {
-    //       throw new Error(`Error adding employee: ${error}`)
-    //     }
-    //   }
+          company?.employees?.push(newEmployee)
+          return await company.save()
+        } catch (error) {
+          throw new Error(`Error adding employee: ${error}`)
+        }
+      }
 
-    //   // Add work details for an employee in a company
-    //   async addWork(params: WORK_PAYLOAD): Promise<any> {
-    //     try {
-    //       const company = await this.CompanyModel.findById(params?.companyId)
-    //       if (!company) throw new Error("Company not found")
+      // Add work details for an employee in a company
+      async addWork(params: WORK_PAYLOAD): Promise<any> {
+        try {
+          const company = await this.CompanyModel.findById(params?.companyId)
+          if (!company) throw new Error("Company not found")
 
-    //       const employee = company?.employees?.find(
-    //         (emp) => emp.id === params?.employeeId
-    //       )
-    //       if (!employee) throw new Error("Employee not found")
+          const employee = company?.employees?.find(
+            (emp : any) => emp.id === params?.employeeId
+          )
+          if (!employee) throw new Error("Employee not found")
 
-    //       employee.work.push({
-    //         ...params,
-    //         createdAt: new Date(),
-    //       })
+          employee.work.push({
+            ...params,
+            createdAt: new Date(),
+          })
 
-    //       return await company.save()
-    //     } catch (error) {
-    //       throw new Error(`Error adding work: ${error}`)
-    //     }
-    //   }
+          return await company.save()
+        } catch (error) {
+          throw new Error(`Error adding work: ${error}`)
+        }
+      }
 
-    //   // Add payment details for an employee
-    //   async addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
-    //     try {
-    //       const company = await this.CompanyModel.findById(params?.companyId)
-    //       if (!company) throw new Error("Company not found")
+      // Add payment details for an employee
+      async addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
+        try {
+          const company = await this.CompanyModel.findById(params?.companyId)
+          if (!company) throw new Error("Company not found")
 
-    //       const employee = company?.employees?.find(
-    //         (emp) => emp.id === params?.employeeId
-    //       )
+          const employee: any = company?.employees?.find(
+            (emp : any) => emp.id === params?.employeeId
+          )
 
-    //       if (!employee) throw new Error("Employee not found")
+          if (!employee) throw new Error("Employee not found")
 
-    //       employee.payments.push(params?.date)
-    //       employee.accountDetails.amount = params?.amount
-    //       employee.accountDetails.proof = params?.proof
+          employee.payments.push(params?.date)
+          employee.accountDetails.amount = params?.amount
+          employee.accountDetails.proof = params?.proof
 
-    //       return await company.save()
-    //     } catch (error) {
-    //       throw new Error(`Error adding payment: ${error}`)
-    //     }
-    //   }
+          return await company.save()
+        } catch (error) {
+          throw new Error(`Error adding payment: ${error}`)
+        }
+      }
 
-    //   // Add bank account details for an employee
-    //   async addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
-    //     try {
-    //       const company = await this.CompanyModel.findById(params?.companyId)
-    //       if (!company) throw new Error("Company not found")
+      // Add bank account details for an employee
+      async addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
+        try {
+          const company = await this.CompanyModel.findById(params?.companyId)
+          if (!company) throw new Error("Company not found")
 
-    //       const employee = company?.employees?.find(
-    //         (emp) => emp.id === params?.employeeId
-    //       )
-    //       if (!employee) throw new Error("Employee not found")
+          const employee = company?.employees?.find(
+            (emp : any) => emp.id === params?.employeeId
+          )
+          if (!employee) throw new Error("Employee not found")
 
-    //       employee.accountDetails.accountNumber = params.accountNumber
-    //       employee.accountDetails.ifsc = params.ifsc
+          employee.accountDetails.accountNumber = params.accountNumber
+          employee.accountDetails.ifsc = params.ifsc
 
-    //       return await company.save()
-    //     } catch (error) {
-    //       throw new Error(`Error adding bank account: ${error}`)
-    //     }
+          return await company.save()
+        } catch (error) {
+          throw new Error(`Error adding bank account: ${error}`)
+        }
   }
 }

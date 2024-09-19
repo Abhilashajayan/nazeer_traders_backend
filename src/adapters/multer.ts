@@ -4,11 +4,11 @@ import path from "path";
 // Define where and how to store files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Define the folder where files will be stored
+    cb(null, 'uploads/'); // Folder where files will be stored
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Use unique name to avoid conflicts
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname)); // Unique name to avoid conflicts
   }
 });
 
@@ -21,7 +21,7 @@ const fileFilter = (req: any, file: any, cb: any) => {
   }
 };
 
-// Export Multer middleware
+
 export const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
