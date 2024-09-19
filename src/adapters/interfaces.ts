@@ -43,6 +43,7 @@ export interface IUsecase {
 }
 
 export interface IWork {
+  id?:string
   date: Date
   count: number
   rate: number

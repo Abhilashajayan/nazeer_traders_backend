@@ -139,29 +139,64 @@ class Repository {
         });
     }
     // Update work details for an employee
+    // async updateWork(params: any): Promise<any> {
+    //   try {
+    //     // console.log(params)
+    //     const company = await this.CompanyModel.findById(params.companyId)
+    //     if (!company) throw new Error("Company not found")
+    //     const employeeId = new mongoose.Types.ObjectId(params.employeeId)
+    //     const employee = company?.employees?.find((emp: any) =>
+    //       emp._id.equals(employeeId)
+    //     )
+    //     if (!employee) throw new Error("Employee not found")
+    //     const work = employee?.work?.find(
+    //       (work: any) => work._id.toString() === params?.workId
+    //     )
+    //     if (!work) throw new Error("Work not found")
+    //     work.date = params.date || work.date
+    //     work.count = params.count || work.count
+    //     work.rate = params.rate || work.rate
+    //     work.total = params.total || work.total
+    //     return await company.save()
+    //   } catch (error) {
+    //     throw new Error(`Error updating work: ${error}`)
+    //   }
+    // }
     updateWork(params) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b;
+            var _a;
             try {
-                // console.log(params)
-                const company = yield this.CompanyModel.findById(params.companyId);
-                if (!company)
+                const { companyId, employeeId, workId, date, count, rate, total } = params;
+                // Data Validation (Optional but recommended)
+                // You can use a library like Joi to validate the incoming data
+                // ... validation logic here ...
+                // Find the company using its ID
+                const company = yield this.CompanyModel.findById(companyId);
+                if (!company) {
                     throw new Error("Company not found");
-                const employeeId = new mongoose_1.default.Types.ObjectId(params.employeeId);
-                const employee = (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.find((emp) => emp._id.equals(employeeId));
-                if (!employee)
+                }
+                // Efficient Employee Search using `find` with destructuring and Mongoose ObjectID conversion
+                const employeeIdObjectId = new mongoose_1.default.Types.ObjectId(employeeId);
+                const employee = company.employees.find((emp) => emp._id.equals(employeeIdObjectId));
+                if (!employee) {
                     throw new Error("Employee not found");
-                const work = (_b = employee === null || employee === void 0 ? void 0 : employee.work) === null || _b === void 0 ? void 0 : _b.find((work) => work._id.toString() === (params === null || params === void 0 ? void 0 : params.workId));
-                if (!work)
-                    throw new Error("Work not found");
-                work.date = params.date || work.date;
-                work.count = params.count || work.count;
-                work.rate = params.rate || work.rate;
-                work.total = params.total || work.total;
-                return yield company.save();
+                }
+                // Find work using optional chaining and default value (if workId is not provided)
+                const work = (_a = employee.work) === null || _a === void 0 ? void 0 : _a.find((wrk) => wrk.id === (params === null || params === void 0 ? void 0 : params.workId));
+                // Update work details using optional chaining and nullish coalescing
+                if (work) {
+                    work.date = date !== null && date !== void 0 ? date : work === null || work === void 0 ? void 0 : work.date;
+                    work.count = count !== null && count !== void 0 ? count : work === null || work === void 0 ? void 0 : work.count;
+                    work.rate = rate !== null && rate !== void 0 ? rate : work === null || work === void 0 ? void 0 : work.rate;
+                    work.total = total !== null && total !== void 0 ? total : work === null || work === void 0 ? void 0 : work.total;
+                }
+                // Ensure company is saved (assuming it's modified)
+                yield company.save();
+                return company; // Return the updated company object (optional)
             }
             catch (error) {
-                throw new Error(`Error updating work: ${error}`);
+                console.error("Error updating work:", error); // Log specific error details
+                throw new Error(`Error updating work: ${error.message}`); // Improve error propagation
             }
         });
     }
@@ -173,7 +208,9 @@ class Repository {
                 const company = yield this.CompanyModel.findById(params === null || params === void 0 ? void 0 : params.companyId);
                 if (!company)
                     throw new Error("Company not found");
-                const employee = (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.find((emp) => emp.id === (params === null || params === void 0 ? void 0 : params.employeeId));
+                // const employeeId = new mongoose.Types.ObjectId(params.employeeId)
+                // const employee = company?.employees?.find((emp: any) => emp._id.equals(employeeId))
+                const employee = (_a = company === null || company === void 0 ? void 0 : company.employees) === null || _a === void 0 ? void 0 : _a.find((emp) => emp._id === params.employeeId);
                 if (!employee)
                     throw new Error("Employee not found");
                 employee.payments.push(Object.assign(Object.assign({}, params), { createdAt: new Date() }));

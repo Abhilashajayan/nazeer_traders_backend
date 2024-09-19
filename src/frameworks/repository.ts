@@ -134,34 +134,78 @@ export class Repository implements IUsecase {
   }
 
   // Update work details for an employee
+  // async updateWork(params: any): Promise<any> {
+  //   try {
+  //     // console.log(params)
+
+  //     const company = await this.CompanyModel.findById(params.companyId)
+  //     if (!company) throw new Error("Company not found")
+
+  //     const employeeId = new mongoose.Types.ObjectId(params.employeeId)
+
+  //     const employee = company?.employees?.find((emp: any) =>
+  //       emp._id.equals(employeeId)
+  //     )
+
+  //     if (!employee) throw new Error("Employee not found")
+
+  //     const work = employee?.work?.find(
+  //       (work: any) => work._id.toString() === params?.workId
+  //     )
+  //     if (!work) throw new Error("Work not found")
+
+  //     work.date = params.date || work.date
+  //     work.count = params.count || work.count
+  //     work.rate = params.rate || work.rate
+  //     work.total = params.total || work.total
+
+  //     return await company.save()
+  //   } catch (error) {
+  //     throw new Error(`Error updating work: ${error}`)
+  //   }
+  // }
+
   async updateWork(params: any): Promise<any> {
     try {
-      // console.log(params)
+      const { companyId, employeeId, workId, date, count, rate, total } = params
 
-      const company = await this.CompanyModel.findById(params.companyId)
-      if (!company) throw new Error("Company not found")
+      // Data Validation (Optional but recommended)
+      // You can use a library like Joi to validate the incoming data
+      // ... validation logic here ...
 
-      const employeeId = new mongoose.Types.ObjectId(params.employeeId)
+      // Find the company using its ID
+      const company = await this.CompanyModel.findById(companyId)
+      if (!company) {
+        throw new Error("Company not found")
+      }
 
-      const employee = company?.employees?.find((emp: any) =>
-        emp._id.equals(employeeId)
+      // Efficient Employee Search using `find` with destructuring and Mongoose ObjectID conversion
+      const employeeIdObjectId = new mongoose.Types.ObjectId(employeeId)
+      const employee = company.employees.find((emp: any) =>
+        emp._id.equals(employeeIdObjectId)
       )
+      if (!employee) {
+        throw new Error("Employee not found")
+      }
 
-      if (!employee) throw new Error("Employee not found")
+      // Find work using optional chaining and default value (if workId is not provided)
+      const work = employee.work?.find((wrk) => wrk.id === params?.workId)
 
-      const work = employee?.work?.find(
-        (work: any) => work._id.toString() === params?.workId
-      )
-      if (!work) throw new Error("Work not found")
+      // Update work details using optional chaining and nullish coalescing
+      if (work) {
+        work.date = date ?? work?.date
+        work.count = count ?? work?.count
+        work.rate = rate ?? work?.rate
+        work.total = total ?? work?.total
+      }
 
-      work.date = params.date || work.date
-      work.count = params.count || work.count
-      work.rate = params.rate || work.rate
-      work.total = params.total || work.total
+      // Ensure company is saved (assuming it's modified)
+      await company.save()
 
-      return await company.save()
+      return company // Return the updated company object (optional)
     } catch (error) {
-      throw new Error(`Error updating work: ${error}`)
+      console.error("Error updating work:", error) // Log specific error details
+      throw new Error(`Error updating work: ${error.message}`) // Improve error propagation
     }
   }
 
@@ -171,8 +215,10 @@ export class Repository implements IUsecase {
       const company = await this.CompanyModel.findById(params?.companyId)
       if (!company) throw new Error("Company not found")
 
-      const employee: any = company?.employees?.find(
-        (emp: any) => emp.id === params?.employeeId
+      // const employeeId = new mongoose.Types.ObjectId(params.employeeId)
+      // const employee = company?.employees?.find((emp: any) => emp._id.equals(employeeId))
+      const employee = company?.employees?.find(
+        (emp: any) => emp._id === params.employeeId
       )
 
       if (!employee) throw new Error("Employee not found")

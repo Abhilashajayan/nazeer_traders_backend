@@ -27,6 +27,7 @@ exports.CompanyModel = exports.EmployeeModel = exports.PaymentModel = exports.Ac
 const mongoose_1 = __importStar(require("mongoose"));
 // Work Schema
 const WorkSchema = new mongoose_1.Schema({
+    _id: { type: String },
     date: { type: Date, required: true },
     count: { type: Number, required: true },
     rate: { type: String, required: true },

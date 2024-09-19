@@ -3,6 +3,7 @@ import { ICompany } from "../adapters/interfaces"
 
 // Work Schema
 const WorkSchema: Schema = new Schema({
+  _id: { type: String},
   date: { type: Date, required: true },
   count: { type: Number, required: true },
   rate: { type: String, required: true },
