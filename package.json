@@ -1,4 +1,17 @@
 {
+  "name": "nazeer_traders_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/frameworks/app.js",
+    "dev": "tsc --watch & nodemon dist/frameworks/app.js",
+    "start:dev": "concurrently \"tsc --watch\" \"nodemon dist/frameworks/app.js\""
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -12,17 +25,7 @@
     "@types/express": "^4.17.21",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.5.4",
+    "concurrently": "^8.2.2",
     "nodemon": "^3.1.4"
-  },
-  "name": "nazeer_traders_backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/frameworks/app.js",
-    "dev": "nodemon dist/frameworks/app.js"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }
