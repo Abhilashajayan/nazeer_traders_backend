@@ -5,9 +5,6 @@ class UseCase {
     constructor(companyRepository) {
         this.companyRepository = companyRepository;
     }
-    update(companyId, payload) {
-        return this.companyRepository.update(companyId, payload);
-    }
     companies() {
         return this.companyRepository.companies();
     }
@@ -33,6 +30,22 @@ class UseCase {
     addBankAccount(params) {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addBankAccount(params);
+    }
+    updateCompany(companyId, name) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.updateCompany(companyId, name);
+    }
+    updateEmployee(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.updateEmployee(params);
+    }
+    updateWork(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.updateWork(params);
+    }
+    updatePayment(params) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.updatePayment(params);
     }
 }
 exports.UseCase = UseCase;

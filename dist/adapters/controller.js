@@ -28,19 +28,13 @@ class Controller {
             }
         });
     }
+    // Update Company
     updateCompany(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(req.body, req.file);
-                const companyId = req.params.id;
-                const payload = req.body;
-                const proofImage = req.file; // Access the uploaded file
-                if (proofImage) {
-                    payload.proof = proofImage.filename; // or proofImage.path if storing with the full path
-                }
-                console.log("the image filename", payload.filename, payload.proof);
-                const updatedCompany = yield this.useCase.update(companyId, payload);
-                res.status(201).json(updatedCompany);
+                const { companyId, name } = req.body;
+                const updatedCompany = yield this.useCase.updateCompany(companyId, name);
+                res.status(200).json(updatedCompany);
             }
             catch (error) {
                 res.status(500).send("Error while updating company");
@@ -48,29 +42,30 @@ class Controller {
             }
         });
     }
-    // get companies
+    // Fetch all companies
     companies(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const companies = yield this.useCase.companies();
-                res.status(201).json(companies);
+                res.status(200).json(companies);
             }
             catch (error) {
-                res.status(500).send("Error while creating company");
-                console.log("Error while creating company => ", error);
+                res.status(500).send("Error while fetching companies");
+                console.log("Error while fetching companies => ", error);
             }
         });
     }
+    // Fetch a single company by ID
     show(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const companyId = req.params.id;
                 const company = yield this.useCase.show(companyId);
-                res.status(201).json(company);
+                res.status(200).json(company);
             }
             catch (error) {
-                res.status(500).send("Error while creating company");
-                console.log("Error while creating company => ", error);
+                res.status(500).send("Error while fetching company");
+                console.log("Error while fetching company => ", error);
             }
         });
     }
@@ -89,6 +84,25 @@ class Controller {
             catch (error) {
                 res.status(500).send("Error while adding employee");
                 console.log("Error while adding employee => ", error);
+            }
+        });
+    }
+    // Update Employee
+    updateEmployee(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { companyId, employeeId, name, phone } = req.body;
+                const updatedEmployee = yield this.useCase.updateEmployee({
+                    companyId,
+                    employeeId,
+                    name,
+                    phone,
+                });
+                res.status(200).json(updatedEmployee);
+            }
+            catch (error) {
+                res.status(500).send("Error while updating employee");
+                console.log("Error while updating employee => ", error);
             }
         });
     }
@@ -113,23 +127,68 @@ class Controller {
             }
         });
     }
+    // Update Work Details for Employee
+    updateWork(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { companyId, employeeId, workId, date, count, rate, total } = req.body;
+                const updatedWork = yield this.useCase.updateWork({
+                    companyId,
+                    employeeId,
+                    workId,
+                    date,
+                    count,
+                    rate,
+                    total,
+                });
+                res.status(200).json(updatedWork);
+            }
+            catch (error) {
+                res.status(500).send("Error while updating work");
+                console.log("Error while updating work => ", error);
+            }
+        });
+    }
     // Add Payment for Employee
     addPayment(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { companyId, employeeId, date, amount, proof } = req.body;
+                const { companyId, employeeId, date, amount } = req.body;
+                const proofImage = req.file; // Access the uploaded file
                 const payment = yield this.useCase.addPayment({
                     companyId,
                     employeeId,
                     date,
                     amount,
-                    proof,
+                    proof: proofImage.filename,
                 });
                 res.status(200).json(payment);
             }
             catch (error) {
                 res.status(500).send("Error while adding payment");
                 console.log("Error while adding payment => ", error);
+            }
+        });
+    }
+    // Update Payment for Employee
+    updatePayment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { companyId, employeeId, paymentId, date, amount } = req.body;
+                const proofImage = req.file;
+                const updatedPayment = yield this.useCase.updatePayment({
+                    companyId,
+                    employeeId,
+                    paymentId,
+                    date,
+                    amount,
+                    proof: proofImage && proofImage.filename
+                });
+                res.status(200).json(updatedPayment);
+            }
+            catch (error) {
+                res.status(500).send("Error while updating payment");
+                console.log("Error while updating payment => ", error);
             }
         });
     }

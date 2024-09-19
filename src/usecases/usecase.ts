@@ -10,15 +10,12 @@ import { Repository } from "../frameworks/repository"
 
 export class UseCase implements IUsecase {
   constructor(private companyRepository: Repository) {}
-  
-  update(companyId : string, payload: any): Promise<any> {
-    return this.companyRepository.update(companyId,payload)
-  }
+
   companies(): Promise<CompanyEntity[]> {
-      return this.companyRepository.companies()
+    return this.companyRepository.companies()
   }
-  show(id:string): Promise<CompanyEntity> {
-      return this.companyRepository.showCompany(id)
+  show(id: string): Promise<CompanyEntity> {
+    return this.companyRepository.showCompany(id)
   }
   createCompany(name: string): Promise<any> {
     return this.companyRepository?.createCompany(name)
@@ -34,5 +31,17 @@ export class UseCase implements IUsecase {
   }
   addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
     return this.companyRepository?.addBankAccount(params)
+  }
+  updateCompany(companyId: string, name: string): Promise<any> {
+    return this.companyRepository?.updateCompany(companyId, name)
+  }
+  updateEmployee(params: any): Promise<any> {
+    return this.companyRepository?.updateEmployee(params)
+  }
+  updateWork(params: any): Promise<any> {
+    return this.companyRepository?.updateWork(params)
+  }
+  updatePayment(params: any): Promise<any> {
+    return this.companyRepository?.updatePayment(params)
   }
 }

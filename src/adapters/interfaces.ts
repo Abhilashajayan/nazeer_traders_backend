@@ -31,12 +31,15 @@ export type ACCOUNT_PAYLOAD = {
 
 export interface IUsecase {
   createCompany(name: string): Promise<any>
-  update(companyId:string,payload: any): Promise<any>
+  updateCompany(companyId:string,name: string): Promise<any>
   companies(): Promise<CompanyEntity[]>
-  // addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any>
-  // addWork(params: WORK_PAYLOAD): Promise<any>
-  // addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any>
-  // addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any>
+  addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any>
+  updateEmployee(params: any): Promise<any>
+  addWork(params: WORK_PAYLOAD): Promise<any>
+  updateWork(params: any): Promise<any>
+  addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any>
+  updatePayment(params: ADD_PAYMENT_PAYLOAD): Promise<any>
+  addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any>
 }
 
 export interface IWork {
@@ -62,7 +65,7 @@ export interface IAccount {
 }
 
 export interface IEmployee {
-  // id: string
+  id: string
   name: string
   phone: string
   work: IWork[]
