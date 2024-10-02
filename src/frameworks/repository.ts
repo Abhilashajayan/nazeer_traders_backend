@@ -3,16 +3,24 @@ import {
   ACCOUNT_PAYLOAD,
   ADD_EMPLOYEE_PAYLOAD,
   ADD_PAYMENT_PAYLOAD,
+  IAccount,
   ICompany,
   IEmployee,
+  IPayment,
   IUsecase,
+  IWork,
   WORK_PAYLOAD,
 } from "../adapters/interfaces"
 import { CompanyEntity } from "../entities/entity"
-import mongoose from "mongoose"
 
 export class Repository implements IUsecase {
-  constructor(private CompanyModel: Model<ICompany>) {}
+  constructor(
+    private CompanyModel: Model<ICompany>,
+    private EmployeeModel: Model<IEmployee>,
+    private WorkModel: Model<IWork>,
+    private PaymentModel: Model<IPayment>,
+    private AccountModel: Model<IAccount>
+  ) {}
 
   async companies(): Promise<CompanyEntity[]> {
     try {
@@ -61,27 +69,10 @@ export class Repository implements IUsecase {
   }
 
   // Add an employee to a company
-  async addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
+  async addEmployees(params: any): Promise<any> {
     try {
-      const company = await this.CompanyModel.findById(params.companyId)
-      if (!company) throw new Error("Company not found")
-
-      const newEmployee = {
-        id: "",
-        name: params.employeeName,
-        phone: params.phone,
-        work: [],
-        accountDetails: {
-          accountNumber: "",
-          ifsc: "",
-          createdAt: new Date(),
-        },
-        payments: [],
-        createdAt: new Date(),
-      }
-
-      company.employees.push(newEmployee)
-      return await company.save()
+      const newEmployee = new this.EmployeeModel(params)
+      return await newEmployee.save()
     } catch (error) {
       throw new Error(`Error adding employee: ${error}`)
     }
@@ -90,144 +81,82 @@ export class Repository implements IUsecase {
   // Update an employee by ID
   async updateEmployee(params: any): Promise<any> {
     try {
-      console.log("employee params", params)
+      const updateEmployeeParams = {
+        name: params.name,
+        phone: params.phone,
+      }
 
-      const company = await this.CompanyModel.findById(params.companyId)
-      if (!company) throw new Error("Company not found")
+      const employee = await this.EmployeeModel.findByIdAndUpdate(
+        params.employeeId,
+        updateEmployeeParams,
+        { new: true }
+      ).exec()
 
-      const employeeId = new mongoose.Types.ObjectId(params.employeeId)
-
-      const employee = company?.employees?.find((emp: any) =>
-        emp._id.equals(employeeId)
-      )
-      if (!employee) throw new Error("Employee not found")
-
-      employee.name = params.name || employee.name
-      employee.phone = params.phone || employee.phone
-
-      return await company.save()
+      return employee
     } catch (error) {
       throw new Error(`Error updating employee: ${error}`)
+    }
+  }
+
+  async showAllEmployees(companyId: string): Promise<any> {
+    try {
+      console.log("company id ", companyId)
+
+      const allEmp = await this.EmployeeModel.find({ companyId: companyId })
+
+      console.log("all employees", allEmp)
+
+      return allEmp
+    } catch (error) {
+      throw new Error(`Error showing employees: ${error}`)
     }
   }
 
   // Add work for an employee
   async addWork(params: WORK_PAYLOAD): Promise<any> {
     try {
-      const company = await this.CompanyModel.findById(params.companyId)
-      if (!company) throw new Error("Company not found")
-
-      const employee = company?.employees?.find((emp: any) =>
-        emp._id.equals(params?.employeeId)
-      )
-      if (!employee) throw new Error("Employee not found")
-
-      employee.work.push({
-        ...params,
-        createdAt: new Date(),
-      })
-
-      return await company.save()
+      const work = new this.WorkModel(params)
+      return await work.save()
     } catch (error) {
       throw new Error(`Error adding work: ${error}`)
     }
   }
 
-  // Update work details for an employee
-  // async updateWork(params: any): Promise<any> {
-  //   try {
-  //     // console.log(params)
-
-  //     const company = await this.CompanyModel.findById(params.companyId)
-  //     if (!company) throw new Error("Company not found")
-
-  //     const employeeId = new mongoose.Types.ObjectId(params.employeeId)
-
-  //     const employee = company?.employees?.find((emp: any) =>
-  //       emp._id.equals(employeeId)
-  //     )
-
-  //     if (!employee) throw new Error("Employee not found")
-
-  //     const work = employee?.work?.find(
-  //       (work: any) => work._id.toString() === params?.workId
-  //     )
-  //     if (!work) throw new Error("Work not found")
-
-  //     work.date = params.date || work.date
-  //     work.count = params.count || work.count
-  //     work.rate = params.rate || work.rate
-  //     work.total = params.total || work.total
-
-  //     return await company.save()
-  //   } catch (error) {
-  //     throw new Error(`Error updating work: ${error}`)
-  //   }
-  // }
+  async showWorks(employeeId: string): Promise<any> {
+    try {
+      const allWorks = await this.WorkModel.find({ employeeId: employeeId })
+      return allWorks
+    } catch (error) {
+      throw new Error(`Error showing work: ${error}`)
+    }
+  }
 
   async updateWork(params: any): Promise<any> {
     try {
-      const { companyId, employeeId, workId, date, count, rate, total } = params
-
-      // Data Validation (Optional but recommended)
-      // You can use a library like Joi to validate the incoming data
-      // ... validation logic here ...
-
-      // Find the company using its ID
-      const company = await this.CompanyModel.findById(companyId)
-      if (!company) {
-        throw new Error("Company not found")
+      const updatePayload = {
+        date: params?.date,
+        count: params?.count,
+        rate: params?.rate,
+        total: params?.total,
       }
 
-      // Efficient Employee Search using `find` with destructuring and Mongoose ObjectID conversion
-      const employeeIdObjectId = new mongoose.Types.ObjectId(employeeId)
-      const employee = company.employees.find((emp: any) =>
-        emp._id.equals(employeeIdObjectId)
-      )
-      if (!employee) {
-        throw new Error("Employee not found")
-      }
+      const updateWork = await this.WorkModel.findByIdAndUpdate(
+        params?.workId,
+        updatePayload,
+        { new: true }
+      ).exec()
 
-      // Find work using optional chaining and default value (if workId is not provided)
-      const work = employee.work?.find((wrk) => wrk.id === params?.workId)
-
-      // Update work details using optional chaining and nullish coalescing
-      if (work) {
-        work.date = date ?? work?.date
-        work.count = count ?? work?.count
-        work.rate = rate ?? work?.rate
-        work.total = total ?? work?.total
-      }
-
-      // Ensure company is saved (assuming it's modified)
-      await company.save()
-
-      return company // Return the updated company object (optional)
+      return updateWork
     } catch (error) {
-      console.error("Error updating work:", error) // Log specific error details
-      throw new Error(`Error updating work: ${error.message}`) // Improve error propagation
+      throw new Error(`Error updating work: ${error}`)
     }
   }
 
   // Add payment details for an employee
   async addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
     try {
-      const company = await this.CompanyModel.findById(params?.companyId)
-      if (!company) throw new Error("Company not found")
-
-      // const employeeId = new mongoose.Types.ObjectId(params.employeeId)
-      // const employee = company?.employees?.find((emp: any) => emp._id.equals(employeeId))
-      const employee = company?.employees?.find(
-        (emp: any) => emp._id === params.employeeId
-      )
-
-      if (!employee) throw new Error("Employee not found")
-
-      employee.payments.push({
-        ...params,
-        createdAt: new Date(),
-      })
-      return await company.save()
+      const newPayment = new this.PaymentModel(params)
+      return newPayment.save()
     } catch (error) {
       throw new Error(`Error adding payment: ${error}`)
     }
@@ -235,46 +164,93 @@ export class Repository implements IUsecase {
 
   async updatePayment(params: any): Promise<any> {
     try {
-      const company = await this.CompanyModel.findById(params.companyId)
-      if (!company) throw new Error("Company not found")
+      const updatePayload = {
+        date: params?.date,
+        amount: params?.amount,
+        proof: params?.proof,
+      }
 
-      const employee: any = company?.employees?.find(
-        (emp: any) => emp.id === params?.employeeId
+      const payment = await this.PaymentModel.findByIdAndUpdate(
+        params?.paymentId,
+        updatePayload,
+        { new: true }
       )
-      if (!employee) throw new Error("Employee not found")
 
-      const payment: any = employee?.payments?.find(
-        (payment: any) => payment._id === params?.paymentId
-      )
-      if (!payment) throw new Error("Payment not found")
-
-      payment.amount = params.amount || payment.amount
-      payment.date = params.date || payment.date
-      payment.proof = params.proof || payment.proof
-
-      return await company.save()
+      return payment
     } catch (error) {
       throw new Error(`Error updating payment: ${error}`)
+    }
+  }
+
+  async showPayments(employeeId: string): Promise<any> {
+    try {
+      const allPayments = await this.PaymentModel.find({
+        employeeId: employeeId,
+      })
+      return allPayments
+    } catch (error) {
+      throw new Error(`Error fetching payments: ${error}`)
     }
   }
 
   // Add or update bank account details for an employee
   async addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
     try {
-      const company = await this.CompanyModel.findById(params.companyId)
-      if (!company) throw new Error("Company not found")
+      const { employeeId, accountNumber, companyId, ifsc } = params
 
-      const employee: any = company?.employees?.find(
-        (emp: any) => emp.id === params?.employeeId
+      const bankDetails = {
+        companyId,
+        employeeId,
+        accountNumber,
+        ifsc,
+      }
+
+      const account = await this.AccountModel.findByIdAndUpdate(
+        employeeId,
+        bankDetails,
+        { new: true, upsert: true }
       )
-      if (!employee) throw new Error("Employee not found")
 
-      employee.accountDetails.accountNumber = params.accountNumber
-      employee.accountDetails.ifsc = params.ifsc
-
-      return await company.save()
+      return account
     } catch (error) {
       throw new Error(`Error updating bank account: ${error}`)
+    }
+  }
+
+  // Delete company
+  async deleteCompany(companyId: string): Promise<any> {
+    try {
+      const company = await this.CompanyModel.findByIdAndDelete(companyId)
+      return company
+    } catch (error) {
+      throw new Error(`Error deleting company account: ${error}`)
+    }
+  }
+  // Delete company
+  async deleteEmployee(employeeId: string): Promise<any> {
+    try {
+      const company = await this.EmployeeModel.findByIdAndDelete(employeeId)
+      return company
+    } catch (error) {
+      throw new Error(`Error deleting employee: ${error}`)
+    }
+  }
+  // Delete company
+  async deleteWork(workId: string): Promise<any> {
+    try {
+      const company = await this.WorkModel.findByIdAndDelete(workId)
+      return company
+    } catch (error) {
+      throw new Error(`Error deleting work: ${error}`)
+    }
+  }
+  // Delete company
+  async deletePayment(paymentId: string): Promise<any> {
+    try {
+      const company = await this.PaymentModel.findByIdAndDelete(paymentId)
+      return company
+    } catch (error) {
+      throw new Error(`Error deleting payment: ${error}`)
     }
   }
 }

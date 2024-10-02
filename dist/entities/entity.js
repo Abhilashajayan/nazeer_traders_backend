@@ -12,9 +12,7 @@ class Work {
 }
 exports.Work = Work;
 class AccountEntity {
-    constructor(
-    // public accountId: string,
-    accountNumber, ifsc, createdAt) {
+    constructor(accountNumber, ifsc, createdAt) {
         this.accountNumber = accountNumber;
         this.ifsc = ifsc;
         this.createdAt = createdAt;
@@ -31,24 +29,16 @@ class PaymentEntity {
 }
 exports.PaymentEntity = PaymentEntity;
 class EmployeeEntity {
-    constructor(
-    // public employeeId: string,
-    name, phone, work, accountDetails, payments, createdAt) {
+    constructor(name, phone, createdAt) {
         this.name = name;
         this.phone = phone;
-        this.work = work;
-        this.accountDetails = accountDetails;
-        this.payments = payments;
         this.createdAt = createdAt;
     }
 }
 exports.EmployeeEntity = EmployeeEntity;
 class CompanyEntity {
-    constructor(
-    // public _id:string,
-    name, employees) {
+    constructor(name) {
         this.name = name;
-        this.employees = employees;
     }
 }
 exports.CompanyEntity = CompanyEntity;

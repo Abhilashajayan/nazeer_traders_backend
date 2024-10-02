@@ -54,10 +54,10 @@ export class Controller {
   // Add Employees
   async addEmployees(req: Request, res: Response) {
     try {
-      const { companyId, employeeName, phone } = req.body
+      const { companyId, name, phone } = req.body
       const updatedCompany = await this.useCase.addEmployees({
         companyId,
-        employeeName,
+        name,
         phone,
       })
       res.status(200).json(updatedCompany)
@@ -83,6 +83,17 @@ export class Controller {
       console.log("Error while updating employee => ", error)
     }
   }
+  // show all Employees
+  async showAllEmployees(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const allEmployees = await this.useCase.showAllEmployees(id)
+      res.status(200).json(allEmployees)
+    } catch (error) {
+      res.status(500).send("Error while showing employees")
+      console.log("Error while showing employees => ", error)
+    }
+  }
 
   // Add Work Details for Employee
   async addWork(req: Request, res: Response) {
@@ -106,10 +117,8 @@ export class Controller {
   // Update Work Details for Employee
   async updateWork(req: Request, res: Response) {
     try {
-      const { companyId, employeeId, workId, date, count, rate, total } = req.body
+      const { workId, date, count, rate, total } = req.body
       const updatedWork = await this.useCase.updateWork({
-        companyId,
-        employeeId,
         workId,
         date,
         count,
@@ -117,9 +126,21 @@ export class Controller {
         total,
       })
       res.status(200).json(updatedWork)
-    } catch (error) { 
+    } catch (error) {
       res.status(500).send("Error while updating work")
       console.log("Error while updating work => ", error)
+    }
+  }
+
+  // show all works of an employee
+  async showAllWorks(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const allWorks = await this.useCase.showWorks(id)
+      res.status(200).json(allWorks)
+    } catch (error) {
+      res.status(500).send("Error while showing work")
+      console.log("Error while showing work => ", error)
     }
   }
 
@@ -145,20 +166,30 @@ export class Controller {
   // Update Payment for Employee
   async updatePayment(req: Request, res: Response) {
     try {
-      const { companyId, employeeId, paymentId, date, amount } = req.body
+      const { paymentId, date, amount } = req.body
       const proofImage = req.file as Express.Multer.File
       const updatedPayment = await this.useCase.updatePayment({
-        companyId,
-        employeeId,
         paymentId,
         date,
         amount,
-        proof: proofImage && proofImage.filename 
+        proof: proofImage && proofImage.filename,
       })
       res.status(200).json(updatedPayment)
     } catch (error) {
       res.status(500).send("Error while updating payment")
       console.log("Error while updating payment => ", error)
+    }
+  }
+
+  // show all payments of an employee
+  async showAllPayments(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const allPayments = await this.useCase.showPayments(id)
+      res.status(200).json(allPayments)
+    } catch (error) {
+      res.status(500).send("Error while showing payement")
+      console.log("Error while  showing payement=> ", error)
     }
   }
 
@@ -176,6 +207,51 @@ export class Controller {
     } catch (error) {
       res.status(500).send("Error while adding bank account")
       console.log("Error while adding bank account => ", error)
+    }
+  }
+
+  // Add Bank Account for Employee
+  async deleteCompany(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const company = await this.useCase.deleteCompany(id)
+      res.status(200).json(company)
+    } catch (error) {
+      res.status(500).send("Error while deleting bank account")
+      console.log("Error while deleting bank account => ", error)
+    }
+  }
+  // Add Bank Account for Employee
+  async deleteEmployee(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const company = await this.useCase.deleteEmployee(id)
+      res.status(200).json(company)
+    } catch (error) {
+      res.status(500).send("Error while deleting employee")
+      console.log("Error while deleting employee => ", error)
+    }
+  }
+  // Add Bank Account for Employee
+  async deleteWork(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const company = await this.useCase.deleteWork(id)
+      res.status(200).json(company)
+    } catch (error) {
+      res.status(500).send("Error while deleting work")
+      console.log("Error while deleting work => ", error)
+    }
+  }
+  // Add Bank Account for Employee
+  async deletePayment(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const company = await this.useCase.deletePayment(id)
+      res.status(200).json(company)
+    } catch (error) {
+      res.status(500).send("Error while deleting payment")
+      console.log("Error while deleting payment => ", error)
     }
   }
 }

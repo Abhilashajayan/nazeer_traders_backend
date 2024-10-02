@@ -19,13 +19,25 @@ class UseCase {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addEmployees(params);
     }
+    showAllEmployees(companyId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.showAllEmployees(companyId);
+    }
     addWork(params) {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addWork(params);
     }
+    showWorks(employeeId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.showWorks(employeeId);
+    }
     addPayment(params) {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addPayment(params);
+    }
+    showPayments(employeeId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.showPayments(employeeId);
     }
     addBankAccount(params) {
         var _a;
@@ -46,6 +58,22 @@ class UseCase {
     updatePayment(params) {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.updatePayment(params);
+    }
+    deleteCompany(companyId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.deleteCompany(companyId);
+    }
+    deleteEmployee(employeeId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.deleteEmployee(employeeId);
+    }
+    deleteWork(workId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.deleteWork(workId);
+    }
+    deletePayment(paymentId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.deletePayment(paymentId);
     }
 }
 exports.UseCase = UseCase;

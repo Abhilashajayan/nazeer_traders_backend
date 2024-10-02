@@ -73,10 +73,10 @@ class Controller {
     addEmployees(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { companyId, employeeName, phone } = req.body;
+                const { companyId, name, phone } = req.body;
                 const updatedCompany = yield this.useCase.addEmployees({
                     companyId,
-                    employeeName,
+                    name,
                     phone,
                 });
                 res.status(200).json(updatedCompany);
@@ -106,6 +106,20 @@ class Controller {
             }
         });
     }
+    // show all Employees
+    showAllEmployees(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const allEmployees = yield this.useCase.showAllEmployees(id);
+                res.status(200).json(allEmployees);
+            }
+            catch (error) {
+                res.status(500).send("Error while showing employees");
+                console.log("Error while showing employees => ", error);
+            }
+        });
+    }
     // Add Work Details for Employee
     addWork(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -131,10 +145,8 @@ class Controller {
     updateWork(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { companyId, employeeId, workId, date, count, rate, total } = req.body;
+                const { workId, date, count, rate, total } = req.body;
                 const updatedWork = yield this.useCase.updateWork({
-                    companyId,
-                    employeeId,
                     workId,
                     date,
                     count,
@@ -146,6 +158,20 @@ class Controller {
             catch (error) {
                 res.status(500).send("Error while updating work");
                 console.log("Error while updating work => ", error);
+            }
+        });
+    }
+    // show all works of an employee
+    showAllWorks(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const allWorks = yield this.useCase.showWorks(id);
+                res.status(200).json(allWorks);
+            }
+            catch (error) {
+                res.status(500).send("Error while showing work");
+                console.log("Error while showing work => ", error);
             }
         });
     }
@@ -174,21 +200,33 @@ class Controller {
     updatePayment(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { companyId, employeeId, paymentId, date, amount } = req.body;
+                const { paymentId, date, amount } = req.body;
                 const proofImage = req.file;
                 const updatedPayment = yield this.useCase.updatePayment({
-                    companyId,
-                    employeeId,
                     paymentId,
                     date,
                     amount,
-                    proof: proofImage && proofImage.filename
+                    proof: proofImage && proofImage.filename,
                 });
                 res.status(200).json(updatedPayment);
             }
             catch (error) {
                 res.status(500).send("Error while updating payment");
                 console.log("Error while updating payment => ", error);
+            }
+        });
+    }
+    // show all payments of an employee
+    showAllPayments(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const allPayments = yield this.useCase.showPayments(id);
+                res.status(200).json(allPayments);
+            }
+            catch (error) {
+                res.status(500).send("Error while showing payement");
+                console.log("Error while  showing payement=> ", error);
             }
         });
     }
@@ -208,6 +246,62 @@ class Controller {
             catch (error) {
                 res.status(500).send("Error while adding bank account");
                 console.log("Error while adding bank account => ", error);
+            }
+        });
+    }
+    // Add Bank Account for Employee
+    deleteCompany(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const company = yield this.useCase.deleteCompany(id);
+                res.status(200).json(company);
+            }
+            catch (error) {
+                res.status(500).send("Error while deleting bank account");
+                console.log("Error while deleting bank account => ", error);
+            }
+        });
+    }
+    // Add Bank Account for Employee
+    deleteEmployee(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const company = yield this.useCase.deleteEmployee(id);
+                res.status(200).json(company);
+            }
+            catch (error) {
+                res.status(500).send("Error while deleting employee");
+                console.log("Error while deleting employee => ", error);
+            }
+        });
+    }
+    // Add Bank Account for Employee
+    deleteWork(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const company = yield this.useCase.deleteWork(id);
+                res.status(200).json(company);
+            }
+            catch (error) {
+                res.status(500).send("Error while deleting work");
+                console.log("Error while deleting work => ", error);
+            }
+        });
+    }
+    // Add Bank Account for Employee
+    deletePayment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const company = yield this.useCase.deletePayment(id);
+                res.status(200).json(company);
+            }
+            catch (error) {
+                res.status(500).send("Error while deleting payment");
+                console.log("Error while deleting payment => ", error);
             }
         });
     }

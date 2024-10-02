@@ -18,7 +18,7 @@ export type ADD_PAYMENT_PAYLOAD = {
 }
 export type ADD_EMPLOYEE_PAYLOAD = {
   companyId: string
-  employeeName: string
+  name: string
   phone: string
 }
 
@@ -31,19 +31,27 @@ export type ACCOUNT_PAYLOAD = {
 
 export interface IUsecase {
   createCompany(name: string): Promise<any>
-  updateCompany(companyId:string,name: string): Promise<any>
+  updateCompany(companyId: string, name: string): Promise<any>
   companies(): Promise<CompanyEntity[]>
   addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any>
   updateEmployee(params: any): Promise<any>
+  showAllEmployees(companyId: string): Promise<any>
   addWork(params: WORK_PAYLOAD): Promise<any>
   updateWork(params: any): Promise<any>
+  showWorks(employeeId: string): Promise<any>
   addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any>
+  showPayments(employeeId: string): Promise<any>
   updatePayment(params: ADD_PAYMENT_PAYLOAD): Promise<any>
   addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any>
+  deleteCompany(companyId: string): Promise<any>
+  deleteEmployee(employeeId: string): Promise<any>
+  deleteWork(workId: string): Promise<any>
+  deletePayment(paymentId: string): Promise<any>
 }
 
 export interface IWork {
-  id?:string
+  companyId: string
+  employeeId: string
   date: Date
   count: number
   rate: number
@@ -51,9 +59,9 @@ export interface IWork {
   createdAt: Date
 }
 
-
-
 export interface IPayment {
+  companyId: string
+  employeeId: string
   date: Date
   amount: number
   proof: string | File
@@ -66,16 +74,12 @@ export interface IAccount {
 }
 
 export interface IEmployee {
-  id: string
+  companyId: string
   name: string
   phone: string
-  work: IWork[]
-  accountDetails: IAccount
-  payments:IPayment[]
   createdAt: Date
 }
 
 export interface ICompany {
   name: string
-  employees: IEmployee[]
 }

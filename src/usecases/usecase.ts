@@ -23,11 +23,20 @@ export class UseCase implements IUsecase {
   addEmployees(params: ADD_EMPLOYEE_PAYLOAD): Promise<any> {
     return this.companyRepository?.addEmployees(params)
   }
+  showAllEmployees(companyId: string): Promise<any> {
+    return this.companyRepository?.showAllEmployees(companyId)
+  }
   addWork(params: WORK_PAYLOAD): Promise<any> {
     return this.companyRepository?.addWork(params)
   }
+  showWorks(employeeId: string): Promise<any> {
+    return this.companyRepository?.showWorks(employeeId)
+  }
   addPayment(params: ADD_PAYMENT_PAYLOAD): Promise<any> {
     return this.companyRepository?.addPayment(params)
+  }
+  showPayments(employeeId: string): Promise<any> {
+    return this.companyRepository?.showPayments(employeeId)
   }
   addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
     return this.companyRepository?.addBankAccount(params)
@@ -43,5 +52,17 @@ export class UseCase implements IUsecase {
   }
   updatePayment(params: any): Promise<any> {
     return this.companyRepository?.updatePayment(params)
+  }
+  deleteCompany(companyId: string): Promise<any> {
+    return this.companyRepository?.deleteCompany(companyId)
+  }
+  deleteEmployee(employeeId: string): Promise<any> {
+    return this.companyRepository?.deleteEmployee(employeeId)
+  }
+  deleteWork(workId: string): Promise<any> {
+    return this.companyRepository?.deleteWork(workId)
+  }
+  deletePayment(paymentId: string): Promise<any> {
+    return this.companyRepository?.deletePayment(paymentId)
   }
 }

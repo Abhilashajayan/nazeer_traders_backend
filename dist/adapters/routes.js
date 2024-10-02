@@ -10,7 +10,7 @@ const multer_1 = require("./multer");
 class CompanyRouter {
     constructor() {
         this.router = (0, express_1.Router)();
-        this.repository = new repository_1.Repository(model_1.CompanyModel);
+        this.repository = new repository_1.Repository(model_1.CompanyModel, model_1.EmployeeModel, model_1.WorkModel, model_1.PaymentModel, model_1.AccountModel);
         this.usecase = new usecase_1.UseCase(this.repository);
         this.controller = new controller_1.Controller(this.usecase);
         // Create Company
@@ -37,6 +37,10 @@ class CompanyRouter {
         this.router.put("/api/companies/update-employee", (req, res) => {
             this.controller.updateEmployee(req, res);
         });
+        // show all Employees
+        this.router.get("/api/companies/:id/employees", (req, res) => {
+            this.controller.showAllEmployees(req, res);
+        });
         // Add Work for an Employee
         this.router.post("/api/companies/add-work", (req, res) => {
             this.controller.addWork(req, res);
@@ -45,17 +49,41 @@ class CompanyRouter {
         this.router.put("/api/companies/update-work", (req, res) => {
             this.controller.updateWork(req, res);
         });
+        // show all Work for an Employee
+        this.router.get("/api/companies/works/:id", (req, res) => {
+            this.controller.showAllWorks(req, res);
+        });
         // Add Payment for an Employee
         this.router.post("/api/companies/add-payment", multer_1.upload.single("proof"), (req, res) => {
             this.controller.addPayment(req, res);
         });
         // Update Payment for an Employee
-        this.router.put("/api/companies/update-payment", (req, res) => {
+        this.router.put("/api/companies/update-payment", multer_1.upload.single("proof"), (req, res) => {
             this.controller.updatePayment(req, res);
+        });
+        // Update Payment for an Employee
+        this.router.get("/api/companies/payments/:id", (req, res) => {
+            this.controller.showAllPayments(req, res);
         });
         // Add Bank Account for an Employee
         this.router.post("/api/companies/add-bank-account", (req, res) => {
             this.controller.addBankAccount(req, res);
+        });
+        // delete  a company
+        this.router.delete("/api/companies/:id", (req, res) => {
+            this.controller.deleteCompany(req, res);
+        });
+        // delete employee in a company
+        this.router.delete("/api/companies/employees/:id", (req, res) => {
+            this.controller.deleteEmployee(req, res);
+        });
+        // delete work for an Employee
+        this.router.delete("/api/companies/works/:id", (req, res) => {
+            this.controller.deleteWork(req, res);
+        });
+        // delete payment in a company
+        this.router.delete("/api/companies/payments/:id", (req, res) => {
+            this.controller.deletePayment(req, res);
         });
     }
 }
