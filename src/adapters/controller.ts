@@ -95,6 +95,18 @@ export class Controller {
     }
   }
 
+  // Fetch a single employee by ID
+  async showEmployee(req: Request, res: Response) {
+    try {
+      const employeeId = req.params.id
+      const employee = await this.useCase.showEmployee(employeeId)
+      res.status(200).json(employee)
+    } catch (error) {
+      res.status(500).send("Error while fetching employee")
+      console.log("Error while fetching employee => ", error)
+    }
+  }
+
   // Add Work Details for Employee
   async addWork(req: Request, res: Response) {
     try {
@@ -207,6 +219,18 @@ export class Controller {
     } catch (error) {
       res.status(500).send("Error while adding bank account")
       console.log("Error while adding bank account => ", error)
+    }
+  }
+
+  // show all payments of an employee
+  async showAccount(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const account = await this.useCase.showAccount(id)
+      res.status(200).json(account)
+    } catch (error) {
+      res.status(500).send("Error while showing payement")
+      console.log("Error while  showing payement=> ", error)
     }
   }
 

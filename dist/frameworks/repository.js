@@ -69,6 +69,20 @@ class Repository {
             }
         });
     }
+    showEmployee(employeeId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const employee = yield this.EmployeeModel.findById(employeeId);
+                if (!employee) {
+                    throw new Error(`Employee not found`);
+                }
+                return employee;
+            }
+            catch (error) {
+                throw new Error(`Error fetching employee: ${error}`);
+            }
+        });
+    }
     // Add an employee to a company
     addEmployees(params) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -210,6 +224,19 @@ class Repository {
             }
         });
     }
+    showAccount(employeeId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const account = yield this.AccountModel.findOne({
+                    employeeId: employeeId,
+                });
+                return account;
+            }
+            catch (error) {
+                throw new Error(`Error fetching payments: ${error}`);
+            }
+        });
+    }
     // Delete company
     deleteCompany(companyId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -234,7 +261,7 @@ class Repository {
             }
         });
     }
-    // Delete company
+    // Delete companya
     deleteWork(workId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

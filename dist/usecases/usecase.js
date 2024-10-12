@@ -23,6 +23,9 @@ class UseCase {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.showAllEmployees(companyId);
     }
+    showEmployee(id) {
+        return this.companyRepository.showEmployee(id);
+    }
     addWork(params) {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addWork(params);
@@ -42,6 +45,10 @@ class UseCase {
     addBankAccount(params) {
         var _a;
         return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.addBankAccount(params);
+    }
+    showAccount(employeeId) {
+        var _a;
+        return (_a = this.companyRepository) === null || _a === void 0 ? void 0 : _a.showAccount(employeeId);
     }
     updateCompany(companyId, name) {
         var _a;

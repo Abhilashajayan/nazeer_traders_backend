@@ -68,6 +68,8 @@ export interface IPayment {
   createdAt: Date
 }
 export interface IAccount {
+  companyId: string
+  employeeId: string
   accountNumber: string
   ifsc: string
   createdAt: Date

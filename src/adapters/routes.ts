@@ -52,7 +52,13 @@ export class CompanyRouter {
         this.controller.addEmployees(req, res)
       }
     )
-
+    // Get details of a specific company by ID
+    this.router.get(
+      "/api/companies/employees/:id",
+      (req: Request, res: Response) => {
+        this.controller.showEmployee(req, res)
+      }
+    )
     // Update Employee
     this.router.put(
       "/api/companies/update-employee",
@@ -122,6 +128,13 @@ export class CompanyRouter {
       "/api/companies/add-bank-account",
       (req: Request, res: Response) => {
         this.controller.addBankAccount(req, res)
+      }
+    )
+    // Add Bank Account for an Employee
+    this.router.get(
+      "/api/companies/account/:id",
+      (req: Request, res: Response) => {
+        this.controller.showAccount(req, res)
       }
     )
 

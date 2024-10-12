@@ -5,7 +5,7 @@ import {
   IUsecase,
   WORK_PAYLOAD,
 } from "../adapters/interfaces"
-import { CompanyEntity } from "../entities/entity"
+import { CompanyEntity, EmployeeEntity } from "../entities/entity"
 import { Repository } from "../frameworks/repository"
 
 export class UseCase implements IUsecase {
@@ -26,6 +26,9 @@ export class UseCase implements IUsecase {
   showAllEmployees(companyId: string): Promise<any> {
     return this.companyRepository?.showAllEmployees(companyId)
   }
+  showEmployee(id: string): Promise<EmployeeEntity> {
+    return this.companyRepository.showEmployee(id)
+  }
   addWork(params: WORK_PAYLOAD): Promise<any> {
     return this.companyRepository?.addWork(params)
   }
@@ -40,6 +43,9 @@ export class UseCase implements IUsecase {
   }
   addBankAccount(params: ACCOUNT_PAYLOAD): Promise<any> {
     return this.companyRepository?.addBankAccount(params)
+  }
+  showAccount(employeeId: string): Promise<any> {
+    return this.companyRepository?.showAccount(employeeId)
   }
   updateCompany(companyId: string, name: string): Promise<any> {
     return this.companyRepository?.updateCompany(companyId, name)

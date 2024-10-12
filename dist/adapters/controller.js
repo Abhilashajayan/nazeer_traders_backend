@@ -120,6 +120,20 @@ class Controller {
             }
         });
     }
+    // Fetch a single employee by ID
+    showEmployee(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const employeeId = req.params.id;
+                const employee = yield this.useCase.showEmployee(employeeId);
+                res.status(200).json(employee);
+            }
+            catch (error) {
+                res.status(500).send("Error while fetching employee");
+                console.log("Error while fetching employee => ", error);
+            }
+        });
+    }
     // Add Work Details for Employee
     addWork(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -246,6 +260,20 @@ class Controller {
             catch (error) {
                 res.status(500).send("Error while adding bank account");
                 console.log("Error while adding bank account => ", error);
+            }
+        });
+    }
+    // show all payments of an employee
+    showAccount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const account = yield this.useCase.showAccount(id);
+                res.status(200).json(account);
+            }
+            catch (error) {
+                res.status(500).send("Error while showing payement");
+                console.log("Error while  showing payement=> ", error);
             }
         });
     }

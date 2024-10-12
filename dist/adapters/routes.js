@@ -33,6 +33,10 @@ class CompanyRouter {
         this.router.post("/api/companies/add-employee", (req, res) => {
             this.controller.addEmployees(req, res);
         });
+        // Get details of a specific company by ID
+        this.router.get("/api/companies/employees/:id", (req, res) => {
+            this.controller.showEmployee(req, res);
+        });
         // Update Employee
         this.router.put("/api/companies/update-employee", (req, res) => {
             this.controller.updateEmployee(req, res);
@@ -68,6 +72,10 @@ class CompanyRouter {
         // Add Bank Account for an Employee
         this.router.post("/api/companies/add-bank-account", (req, res) => {
             this.controller.addBankAccount(req, res);
+        });
+        // Add Bank Account for an Employee
+        this.router.get("/api/companies/account/:id", (req, res) => {
+            this.controller.showAccount(req, res);
         });
         // delete  a company
         this.router.delete("/api/companies/:id", (req, res) => {

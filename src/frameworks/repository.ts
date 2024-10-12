@@ -11,7 +11,7 @@ import {
   IWork,
   WORK_PAYLOAD,
 } from "../adapters/interfaces"
-import { CompanyEntity } from "../entities/entity"
+import { CompanyEntity, EmployeeEntity } from "../entities/entity"
 
 export class Repository implements IUsecase {
   constructor(
@@ -65,6 +65,18 @@ export class Repository implements IUsecase {
       return company
     } catch (error) {
       throw new Error(`Error updating company: ${error}`)
+    }
+  }
+
+  async showEmployee(employeeId: string): Promise<EmployeeEntity> {
+    try {
+      const employee = await this.EmployeeModel.findById(employeeId)
+      if (!employee) {
+        throw new Error(`Employee not found`)
+      }
+      return employee
+    } catch (error) {
+      throw new Error(`Error fetching employee: ${error}`)
     }
   }
 
@@ -217,6 +229,17 @@ export class Repository implements IUsecase {
     }
   }
 
+  async showAccount(employeeId: string): Promise<any> {
+    try {
+      const account = await this.AccountModel.findOne({
+        employeeId: employeeId,
+      })
+      return account
+    } catch (error) {
+      throw new Error(`Error fetching payments: ${error}`)
+    }
+  }
+
   // Delete company
   async deleteCompany(companyId: string): Promise<any> {
     try {
@@ -235,7 +258,7 @@ export class Repository implements IUsecase {
       throw new Error(`Error deleting employee: ${error}`)
     }
   }
-  // Delete company
+  // Delete companya
   async deleteWork(workId: string): Promise<any> {
     try {
       const company = await this.WorkModel.findByIdAndDelete(workId)
