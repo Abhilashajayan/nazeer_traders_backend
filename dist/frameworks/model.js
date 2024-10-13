@@ -33,6 +33,7 @@ const WorkSchema = new mongoose_1.Schema({
     count: { type: Number, required: true },
     rate: { type: String, required: true },
     total: { type: String, required: true },
+    remarks: { type: String },
     createdAt: { type: Date, default: Date.now },
 });
 // payment Schema

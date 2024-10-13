@@ -150,6 +150,7 @@ export class Repository implements IUsecase {
         count: params?.count,
         rate: params?.rate,
         total: params?.total,
+        remarks: params?.remarks,
       }
 
       const updateWork = await this.WorkModel.findByIdAndUpdate(

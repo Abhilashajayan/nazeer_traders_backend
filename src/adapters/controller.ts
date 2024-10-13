@@ -110,7 +110,7 @@ export class Controller {
   // Add Work Details for Employee
   async addWork(req: Request, res: Response) {
     try {
-      const { companyId, employeeId, date, count, rate, total } = req.body
+      const { companyId, employeeId, date, count, rate, total, remarks } = req.body
       const updatedWork = await this.useCase.addWork({
         companyId,
         employeeId,
@@ -118,6 +118,7 @@ export class Controller {
         count,
         rate,
         total,
+        remarks,
       })
       res.status(200).json(updatedWork)
     } catch (error) {
@@ -129,13 +130,14 @@ export class Controller {
   // Update Work Details for Employee
   async updateWork(req: Request, res: Response) {
     try {
-      const { workId, date, count, rate, total } = req.body
+      const { workId, date, count, rate, total, remarks } = req.body
       const updatedWork = await this.useCase.updateWork({
         workId,
         date,
         count,
         rate,
         total,
+        remarks,
       })
       res.status(200).json(updatedWork)
     } catch (error) {

@@ -155,6 +155,7 @@ class Repository {
                     count: params === null || params === void 0 ? void 0 : params.count,
                     rate: params === null || params === void 0 ? void 0 : params.rate,
                     total: params === null || params === void 0 ? void 0 : params.total,
+                    remarks: params === null || params === void 0 ? void 0 : params.remarks,
                 };
                 const updateWork = yield this.WorkModel.findByIdAndUpdate(params === null || params === void 0 ? void 0 : params.workId, updatePayload, { new: true }).exec();
                 return updateWork;

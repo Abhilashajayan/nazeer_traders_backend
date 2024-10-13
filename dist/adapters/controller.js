@@ -138,7 +138,7 @@ class Controller {
     addWork(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { companyId, employeeId, date, count, rate, total } = req.body;
+                const { companyId, employeeId, date, count, rate, total, remarks } = req.body;
                 const updatedWork = yield this.useCase.addWork({
                     companyId,
                     employeeId,
@@ -146,6 +146,7 @@ class Controller {
                     count,
                     rate,
                     total,
+                    remarks,
                 });
                 res.status(200).json(updatedWork);
             }
@@ -159,13 +160,14 @@ class Controller {
     updateWork(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { workId, date, count, rate, total } = req.body;
+                const { workId, date, count, rate, total, remarks } = req.body;
                 const updatedWork = yield this.useCase.updateWork({
                     workId,
                     date,
                     count,
                     rate,
                     total,
+                    remarks,
                 });
                 res.status(200).json(updatedWork);
             }

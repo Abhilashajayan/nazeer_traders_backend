@@ -5,6 +5,7 @@ export type WORK_PAYLOAD = {
   count: number
   rate: number
   total: number
+  remarks: string
   companyId: string
   employeeId: string
 }
@@ -56,6 +57,7 @@ export interface IWork {
   count: number
   rate: number
   total: number
+  remarks: string
   createdAt: Date
 }
 
